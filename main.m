@@ -16,7 +16,7 @@ void printFileContents(NSString* filePath)
 }
 
 @protocol UploadProtocol
-- (void)uploadFile:(NSURLSession*)session filePath:(NSString*)filePat completionHandler:(void(^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
+- (void)uploadFile:(NSString*)filePat completionHandler:(void(^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
 @end
 
 @interface S3 : NSObject<UploadProtocol>
@@ -25,8 +25,11 @@ void printFileContents(NSString* filePath)
 
 @implementation S3
 
-- (void)uploadFile:(NSURLSession*)session filePath:(NSString*)filePath completionHandler:(void(^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler
+- (void)uploadFile:(NSString*)filePath completionHandler:(void(^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler
 {
+    NSURLSessionConfiguration* configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession* session = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:nil];
+    
     NSURL* url = [NSURL URLWithString:@"https://s3.ca-central-1.amazonaws.com/stage-ca"];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     
@@ -41,9 +44,6 @@ void printFileContents(NSString* filePath)
 
 int main(int argc, const char * argv[])
 {
-    NSURLSessionConfiguration* configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    NSURLSession* session = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:nil];
-    
     NSString* filePath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"txt"];
     
     dispatch_group_t group = dispatch_group_create();
@@ -63,6 +63,6 @@ int main(int argc, const char * argv[])
     S3* s3 = [[S3 alloc] init];
     
     dispatch_group_enter(group);
-    [s3 uploadFile:session filePath:filePath completionHandler:completionHandler];
+    [s3 uploadFile:filePath completionHandler:completionHandler];
     dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
 }
