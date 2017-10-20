@@ -28,6 +28,7 @@ set(TEST_FILES
     test.txt
     test.bin
     test_processed.bin
+    test_processed.txt
 )
 
 # Tell CMake to create the executable

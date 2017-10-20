@@ -63,3 +63,5 @@ fastlane/test_output
 iOSInjectionProject/
 
 ios-toolchain.cmake
+test_processed.bin
+test_processed.bin.bkp

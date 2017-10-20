@@ -22,6 +22,8 @@
     
     NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW"];
     [request setValue:contentType forHTTPHeaderField: @"Content-Type"];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"1.0" forHTTPHeaderField: @"MIME-Version"];
     
     NSURLSessionUploadTask* task = [session uploadTaskWithRequest:request fromFile:[NSURL fileURLWithPath:filePath] completionHandler:completionHandler];
     [task resume];
@@ -45,7 +47,7 @@
 
 int main(int argc, const char * argv[])
 {
-    NSString* filePath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"txt"];
+    NSString* filePath = [[NSBundle mainBundle] pathForResource:@"test_processed" ofType:@"bin"];
     
     dispatch_group_t group = dispatch_group_create();
     void (^completionHandler)(NSData *data, NSURLResponse *response, NSError *error) = ^(NSData *data, NSURLResponse *response, NSError *error)
