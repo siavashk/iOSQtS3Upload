@@ -25,14 +25,11 @@ find_package(Qt5 COMPONENTS Core)
 include("DoQtMess.cmake")
 
 set(TEST_FILES
-    test.txt
     test.bin
-    test_processed.bin
-    test_processed.txt
 )
 
 # Tell CMake to create the executable
-add_executable(iOSQtS3Upload main.m)
+add_executable(iOSQtS3Upload main.mm s3.m s3.h utilities.h utilities.cpp)
 
 ADD_BUNDLE_RESOURCES(iOSQtS3Upload
     ${TEST_FILES}
